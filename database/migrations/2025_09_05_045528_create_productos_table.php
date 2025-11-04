@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
             $table->string('clave_producto', 20)->unique();
-            $table->string('nombre', 255);
-            $table->text('descripcion')->nullable();
+            $table->string('tipo_producto', 255);
             $table->decimal('precio_kg', 8, 2);
-            $table->string('codigo_barras', 20)->unique()->nullable();
+            $table->unsignedSmallInteger('pos_peso');
+            $table->boolean('libras')->default(false);
+            $table->unsignedSmallInteger('longitud_codigo');
             $table->timestamps();
         });
     }

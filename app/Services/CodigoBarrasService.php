@@ -2,13 +2,50 @@
 
 namespace App\Services;
 
+use App\Models\Producto;
+
 use Carbon\Carbon;
+
 
 class CodigoBarrasService
 {
     public function parse(string $codigo): array
     {
         try {
+
+            $longitud = strlen($codigo);
+            $producto = Producto::where('longitud_codigo', $longitud)->first();
+
+            if (!$producto) {
+                return [
+                        "error" => true,
+                        "mensaje" => "Código demasiado corto o incompleto: " . strlen($codigo),
+                    ];
+            }
+
+            $pos = $producto->pos_peso;
+
+            if ($producto->libras) {
+                $librasRaw = substr($codigo, $pos, 6);
+                $pesoLb = (int)$librasRaw / 10;
+                $pesoKg = $pesoLb * 0.45359237;
+                $pesoKg = floor($pesoKg * 100) / 100;
+            } else {
+                $kilosRaw = substr($codigo, $pos, 6);
+                $pesoKg = (int)$kilosRaw / 100;
+            }
+
+            return [
+                    "error" => false,
+                    "producto" => $producto->tipo_producto,
+                    "producto_id" => $producto->id,
+                    "clave_producto" => $producto->clave_producto,
+                    "precio_kg" => (float) $producto->precio_kg,
+                    "peso_kg" => round($pesoKg, 2),
+                    "fecha_empaque" => Carbon::now('America/Mexico_City')->format('Y-m-d'),
+                ];
+
+            /*
             if (strlen($codigo) == 70) {
                 $pos = 0;
                 // Código de producto
@@ -66,7 +103,6 @@ class CodigoBarrasService
                     "fecha_empaque" => $fechaEmpaque->format('Y-m-d'),
                 ];
             }
-
             if (strlen($codigo) == 48) {
                 $pos = 0;
                 $codigoProducto= substr($codigo, $pos, 20);
@@ -187,7 +223,7 @@ class CodigoBarrasService
                     "error" => true,
                     "mensaje" => "Código demasiado corto o incompleto: " . strlen($codigo),
                 ];
-            }
+            }*/
 
         } catch (\Exception $e) {
             return [

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Producto extends Model
 {
@@ -11,23 +12,34 @@ class Producto extends Model
 
     protected $fillable = [
         'clave_producto',
-        'nombre',
-        'descripcion',
+        'tipo_producto',
         'precio_kg',
-        'codigo_barras',
+        'longitud_codigo',
+        'pos_peso',
+        'libras',
     ];
 
+    protected $casts = [
+        'precio_kg' => 'decimal:2',
+        'longitud_codigo' => 'integer',
+        'pos_peso' => 'integer',
+        'libras' => 'boolean',
+    ];
 
-    public static function rules()
+    public static function rules(): array
     {
         return [
             'clave_producto' => 'required|string|max:20|unique:productos,clave_producto',
             'precio_kg' => 'required|decimal:2',
-            'codigo_barras' => 'nullable|string|max:20|unique:productos,codigo_barras',
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string|max:1000',
+            'tipo_producto' => 'required|string|max:255',
+            'longitud_codigo' => 'required|integer|min:1',
+            'pos_peso' => 'required|integer|min:0|max:65535',
+            'libras' => 'required|boolean',
         ];
     }
 
-
+    public function cajas(): HasMany
+    {
+        return $this->hasMany(Caja::class, 'tipo_producto', 'tipo_producto');
+    }
 }
