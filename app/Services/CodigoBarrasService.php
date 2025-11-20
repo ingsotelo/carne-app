@@ -13,6 +13,9 @@ class CodigoBarrasService
     {
         try {
 
+            // Reemplaza espacios en blanco con ceros para evitar offsets al interpretar el código
+            $codigo = preg_replace('/\s/', '0', $codigo);
+
             $longitud = strlen($codigo);
             $producto = Producto::where('longitud_codigo', $longitud)->first();
 
