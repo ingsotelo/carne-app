@@ -33,7 +33,9 @@ export default function Show({
     flash,
 }: ShowProps) {
   const [codigo, setCodigo] = useState('');
-  const [cajas, setCajas] = useState<Caja[]>(cajasIniciales);
+  const [cajas, setCajas] = useState<Caja[]>(
+    [...cajasIniciales].sort((a, b) => b.id - a.id),
+  );
   const [resumen, setResumen] = useState(resumenInicial);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -88,7 +90,7 @@ export default function Show({
         return;
       }
 
-      setCajas([...cajas, data.caja]);
+      setCajas([data.caja, ...cajas]);
       setResumen(data.resumen);
 
       toast.success(`✅ Caja registrada: ${data.caja.tipoProducto} | ${data.caja.pesoKg} KG`);
