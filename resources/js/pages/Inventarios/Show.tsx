@@ -178,7 +178,7 @@ export default function Show({
             <table className="w-full text-left border min-w-[600px]">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="p-2 border">#</th>
+                  <th className="p-2 border">ID</th>
                   <th className="p-2 border">Producto</th>
                   <th className="p-2 border">Peso KG</th>
                   <th className="p-2 border">Fecha Empaque</th>
@@ -188,7 +188,7 @@ export default function Show({
               <tbody>
                 {cajas.map((caja, idx) => (
                   <tr key={idx}>
-                    <td className="p-2 border">{idx + 1}</td>
+                    <td className="p-2 border">{caja.id}</td>
                     <td className="p-2 border">{caja.tipo_producto}</td>
                     <td className="p-2 border">{caja.peso}</td>
                     <td className="p-2 border">{caja.fecha_empaque}</td>
