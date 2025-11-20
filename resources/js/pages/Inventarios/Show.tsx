@@ -178,7 +178,7 @@ export default function Show({
             <table className="w-full text-left border min-w-[600px]">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="p-2 border">ID</th>
+                  <th className="p-2 border">#</th>
                   <th className="p-2 border">Producto</th>
                   <th className="p-2 border">Peso KG</th>
                   <th className="p-2 border">Fecha Empaque</th>
@@ -186,22 +186,25 @@ export default function Show({
                 </tr>
               </thead>
               <tbody>
-                {cajas.map((caja, idx) => (
-                  <tr key={idx}>
-                    <td className="p-2 border">{caja.id}</td>
-                    <td className="p-2 border">{caja.tipo_producto}</td>
-                    <td className="p-2 border">{caja.peso}</td>
-                    <td className="p-2 border">{caja.fecha_empaque}</td>
-                    <td className="p-2 border text-center">
-                      <button
-                        onClick={() => handleDelete(caja.id)}
-                        className="px-2 py-1 bg-red-600 text-white rounded"
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {cajas.map((caja, idx) => {
+                  const consecutivo = cajas.length - idx;
+                  return (
+                    <tr key={caja.id}>
+                      <td className="p-2 border">{consecutivo}</td>
+                      <td className="p-2 border">{caja.tipo_producto}</td>
+                      <td className="p-2 border">{caja.peso}</td>
+                      <td className="p-2 border">{caja.fecha_empaque}</td>
+                      <td className="p-2 border text-center">
+                        <button
+                          onClick={() => handleDelete(caja.id)}
+                          className="px-2 py-1 bg-red-600 text-white rounded"
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
