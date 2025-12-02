@@ -16,6 +16,7 @@ class Producto extends Model
         'precio_kg',
         'longitud_codigo',
         'pos_peso',
+        'longitud_peso',
         'libras',
     ];
 
@@ -23,6 +24,7 @@ class Producto extends Model
         'precio_kg' => 'decimal:2',
         'longitud_codigo' => 'integer',
         'pos_peso' => 'integer',
+        'longitud_peso' => 'integer',
         'libras' => 'boolean',
     ];
 
@@ -34,6 +36,7 @@ class Producto extends Model
             'tipo_producto' => 'required|string|max:255',
             'longitud_codigo' => 'required|integer|min:1',
             'pos_peso' => 'required|integer|min:0|max:65535',
+            'longitud_peso' => 'required|integer|min:1|max:6',
             'libras' => 'required|boolean',
         ];
     }

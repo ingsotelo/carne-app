@@ -11,6 +11,7 @@ interface Producto {
   precio_kg: string;
   longitud_codigo: number;
   pos_peso: number;
+  longitud_peso: number;
   libras: boolean;
   total_cajas: number;
   total_peso: string;
@@ -33,6 +34,7 @@ const emptyFormState = {
   precio_kg: '',
   longitud_codigo: '',
   pos_peso: '',
+  longitud_peso: '',
   libras: false,
 };
 
@@ -67,6 +69,7 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
       precio_kg: producto.precio_kg,
       longitud_codigo: String(producto.longitud_codigo),
       pos_peso: String(producto.pos_peso),
+      longitud_peso: String(producto.longitud_peso),
       libras: producto.libras,
     });
     editForm.clearErrors();
@@ -229,6 +232,28 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
 
               <div className="col-span-1">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Longitud del peso (d��gitos)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="6"
+                  value={createForm.data.longitud_peso}
+                  onChange={(event) =>
+                    createForm.setData('longitud_peso', event.target.value)
+                  }
+                  className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+                  placeholder="Ej. 6"
+                />
+                {createForm.errors.longitud_peso && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {createForm.errors.longitud_peso}
+                  </p>
+                )}
+              </div>
+
+              <div className="col-span-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Posici�n del peso dentro del c�digo
                 </label>
                 <input
@@ -379,6 +404,25 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
 
               <div>
                 <label className="block text-sm font-medium text-blue-900 dark:text-blue-100">
+                  Longitud del peso (d��gitos)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="6"
+                  value={editForm.data.longitud_peso}
+                  onChange={(event) => editForm.setData('longitud_peso', event.target.value)}
+                  className="mt-1 w-full rounded border border-blue-200 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-blue-500/60 dark:bg-slate-950 dark:text-blue-100"
+                />
+                {editForm.errors.longitud_peso && (
+                  <p className="mt-1 text-xs text-rose-600">
+                    {editForm.errors.longitud_peso}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-blue-900 dark:text-blue-100">
                   Posici�n del peso dentro del c�digo
                 </label>
                 <input
@@ -458,6 +502,9 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
                   Posicion peso
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Longitud peso
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   Usa libras
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -502,6 +549,9 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                       {producto.pos_peso}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                      {producto.longitud_peso}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                       {producto.libras ? 'Si' : 'No'}

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('tipo_producto', 255);
             $table->decimal('precio_kg', 8, 2);
             $table->unsignedSmallInteger('pos_peso');
+            $table->unsignedSmallInteger('longitud_peso')->default(6);
             $table->boolean('libras')->default(false);
             $table->unsignedSmallInteger('longitud_codigo');
             $table->timestamps();

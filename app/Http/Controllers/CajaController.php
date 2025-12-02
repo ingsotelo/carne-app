@@ -24,15 +24,21 @@ class CajaController extends Controller
     public function store(Request $request, Inventario $inventario)
     {
 
-        $codigo = $request->input('codigo_barras');
+        $validated = $request->validate([
+            'codigo_barras' => 'required|string|min:6',
+        ]);
+
+        $codigo = $validated['codigo_barras'];
 
         $parsed = $this->codigoBarrasService->parse($codigo);
 
-        if ($parsed['error']) {
+        if (!empty($parsed['error'])) {
             return response()->json([
                 'success' => false,
-                'mensaje' => $parsed['mensaje'],
-            ]);
+                'mensaje' => $parsed['mensaje'] ?? 'No fue posible interpretar el codigo de barras.',
+                'codigo_error' => $parsed['codigo_error'] ?? null,
+                'detalle' => $parsed['detalle'] ?? null,
+            ], 422);
         }
 
        // Validar duplicado
@@ -43,7 +49,7 @@ class CajaController extends Controller
             return response()->json([
                 'success' => false,
                 'mensaje' => 'La caja ya fue registrada en este inventario',
-            ]);
+            ], 409);
         }
 
         try {

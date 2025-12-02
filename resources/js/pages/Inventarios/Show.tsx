@@ -93,7 +93,9 @@ export default function Show({
       setCajas([data.caja, ...cajas]);
       setResumen(data.resumen);
 
-      toast.success(`✅ Caja registrada: ${data.caja.tipoProducto} | ${data.caja.pesoKg} KG`);
+      const producto = data.caja.tipo_producto ?? data.caja.tipoProducto ?? 'Producto';
+      const peso = data.caja.peso ?? data.caja.pesoKg ?? 0;
+      toast.success(`✅ Caja registrada: ${producto} | ${peso} KG`);
       resetInput();
 
     } catch (error: any) {
