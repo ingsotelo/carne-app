@@ -82,6 +82,26 @@ export default function VentasIndex({ ventaReciente, productos, flash }: IndexPr
   const scanInputRef = useRef<HTMLInputElement>(null);
   const [editingVentaId, setEditingVentaId] = useState<number | null>(null);
 
+  const getErrorMessage = (payload: any, fallback: string) => {
+    if (!payload || typeof payload !== 'object') {
+      return fallback;
+    }
+
+    if (typeof payload.message === 'string' && payload.message.trim()) {
+      return payload.message;
+    }
+
+    if (typeof payload.mensaje === 'string' && payload.mensaje.trim()) {
+      return payload.mensaje;
+    }
+
+    const firstError = payload.errors && typeof payload.errors === 'object'
+      ? Object.values(payload.errors).flat().find((value) => typeof value === 'string' && value.trim())
+      : null;
+
+    return typeof firstError === 'string' ? firstError : fallback;
+  };
+
   useEffect(() => {
     if (!flash) return;
 
@@ -202,7 +222,7 @@ export default function VentasIndex({ ventaReciente, productos, flash }: IndexPr
       const payload = await response.json();
 
       if (!response.ok || payload.error) {
-        throw new Error(payload.message || 'No se pudo interpretar el codigo.');
+        throw new Error(getErrorMessage(payload, 'No se pudo interpretar el codigo.'));
       }
 
       const result = payload.payload;
