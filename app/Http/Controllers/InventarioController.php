@@ -183,16 +183,6 @@ class InventarioController extends Controller
     public function destroy(Inventario $inventario)
     {
         try {
-            // Verificar si tiene cajas
-            $totalCajas = $inventario->cajas()->count();
-
-            if ($totalCajas > 0) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "No se puede eliminar el inventario porque tiene {$totalCajas} caja(s) registrada(s). Primero elimina todas las cajas."
-                ], 400);
-            }
-
             $inventario->delete();
 
             return response()->json([
