@@ -18,6 +18,17 @@
             margin-bottom: 8px;
         }
 
+        .header {
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            display: block;
+            margin-bottom: 12px;
+        }
+
         .meta {
             margin-bottom: 20px;
         }
@@ -50,7 +61,10 @@
     </style>
 </head>
 <body>
-    <h1>Nota de venta</h1>
+    <div class="header">
+        <img class="logo" src="{{ public_path('recibo.png') }}" alt="Logo">
+        <h1>Nota de venta</h1>
+    </div>
 
     <div class="meta">
         <p><strong>Cliente:</strong> {{ $venta->cliente_nombre }}</p>
