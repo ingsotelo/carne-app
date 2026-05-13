@@ -58,35 +58,47 @@
         <p><strong>Nota:</strong> #{{ $venta->id }}</p>
     </div>
 
+    @php
+        $productosAgrupados = $venta->items
+            ->groupBy('descripcion_producto')
+            ->map(function ($items, $descripcion) {
+                return [
+                    'descripcion' => $descripcion,
+                    'cajas' => $items->count(),
+                    'peso_kg' => $items->sum(fn ($item) => (float) $item->peso_kg),
+                    'precio_kg' => (float) $items->first()->precio_kg,
+                    'importe' => $items->sum(fn ($item) => (float) $item->total),
+                ];
+            })
+            ->values();
+    @endphp
+
     <table>
         <thead>
             <tr>
                 <th>#</th>
                 <th>Descripcion</th>
+                <th>Cajas</th>
                 <th>Peso (Kg)</th>
                 <th>Precio/Kg</th>
-                <th>Total caja</th>
+                <th>Importe</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($venta->items as $index => $item)
+            @foreach ($productosAgrupados as $index => $producto)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>
-                        {{ $item->descripcion_producto }}
-                        @if($item->codigo_barras)
-                            <br><small>Codigo: {{ $item->codigo_barras }}</small>
-                        @endif
-                    </td>
-                    <td>{{ number_format((float) $item->peso_kg, 2) }}</td>
-                    <td>${{ number_format((float) $item->precio_kg, 2) }}</td>
-                    <td>${{ number_format((float) $item->total, 2) }}</td>
+                    <td>{{ $producto['descripcion'] }}</td>
+                    <td>{{ $producto['cajas'] }}</td>
+                    <td>{{ number_format($producto['peso_kg'], 2) }}</td>
+                    <td>${{ number_format($producto['precio_kg'], 2) }}</td>
+                    <td>${{ number_format($producto['importe'], 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4" style="text-align: right;">Total nota de venta</td>
+                <td colspan="5" style="text-align: right;">Total nota de venta</td>
                 <td>${{ number_format((float) $venta->total, 2) }}</td>
             </tr>
         </tfoot>
