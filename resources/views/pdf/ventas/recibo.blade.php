@@ -10,7 +10,7 @@
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 12px;
             color: #1f2937;
-            margin: 32px;
+            margin: 18px 28px 28px;
         }
 
         h1 {
@@ -19,14 +19,16 @@
         }
 
         .header {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            min-height: 90px;
         }
 
         .logo {
             width: 120px;
             height: auto;
             display: block;
-            margin-bottom: 12px;
+            float: right;
+            margin: 0 0 12px 20px;
         }
 
         .meta {
@@ -64,12 +66,12 @@
     <div class="header">
         <img class="logo" src="{{ public_path('recibo.png') }}" alt="Logo">
         <h1>Nota de venta</h1>
-    </div>
 
-    <div class="meta">
-        <p><strong>Cliente:</strong> {{ $venta->cliente_nombre }}</p>
-        <p><strong>Fecha:</strong> {{ optional($venta->fecha_venta)->format('d/m/Y') }}</p>
-        <p><strong>Nota:</strong> #{{ $venta->id }}</p>
+        <div class="meta">
+            <p><strong>Cliente:</strong> {{ $venta->cliente_nombre }}</p>
+            <p><strong>Fecha:</strong> {{ optional($venta->fecha_venta)->format('d/m/Y') }}</p>
+            <p><strong>Nota:</strong> #{{ $venta->id }}</p>
+        </div>
     </div>
 
     @php
