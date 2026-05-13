@@ -10,7 +10,7 @@
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 12px;
             color: #1f2937;
-            margin: 18px 28px 28px;
+            margin: 10px 28px 28px;
         }
 
         h1 {
@@ -19,8 +19,8 @@
         }
 
         .header {
-            margin-bottom: 20px;
-            min-height: 90px;
+            margin-bottom: 30px;
+            min-height: 110px;
         }
 
         .logo {
@@ -42,6 +42,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 18px;
         }
 
         th, td {
