@@ -10,9 +10,15 @@ class CodigoBarrasService
 {
     private const CODIGOS_54_POR_PRODUCTO = [
         'RECORTE COMERCIAL CONG.' => ['2106125'],
-        'RECORTE COMERCIAL CONG' => ['2106125'],
         'RECORTE 80/20' => ['1255519', '2106561'],
-        'PIERNA SIN HUESO CONG' => ['2101030'],
+        'PIERNA SIN HUESO CONG.' => ['2101030'],
+        'GRASA BACHOCO' => ['1204010'],
+    ];
+
+    private const CODIGOS_32_POR_PRODUCTO = [
+        'ENTRECOT S/F GRANJERO' => ['007792'],
+        'COSTILLA MEAT GRANJERO AV' => ['008640', '008630'],
+        'CUERO GRANJERO C/G Y C/C' => ['021236', '021237'],
     ];
 
     public function parse(string $codigo): array
@@ -40,15 +46,15 @@ class CodigoBarrasService
             $producto = $this->resolveProductoPorCodigo($productos, $codigo, $longitud);
 
             if (!$producto) {
-                if ($longitud === 54) {
-                    $segmento = substr($codigo, 18, 7);
-                    $tipoEsperado = $this->getTipoProductoPorPatron54($segmento);
+                if ($this->usaPatronIdentificador($longitud)) {
+                    $segmento = $this->getSegmentoIdentificador($codigo, $longitud);
+                    $tipoEsperado = $this->getTipoProductoPorPatron($longitud, $segmento);
 
                     if ($tipoEsperado) {
                         return [
                             'error' => true,
                             'codigo_error' => 'producto_faltante_en_bd',
-                            'mensaje' => "El patron {$segmento} corresponde a {$tipoEsperado}, pero ese producto no esta registrado en la base de datos con longitud 54.",
+                            'mensaje' => "El patron {$segmento} corresponde a {$tipoEsperado}, pero ese producto no esta registrado en la base de datos con longitud {$longitud}.",
                             'longitud_recibida' => $longitud,
                             'segmento_identificador' => $segmento,
                             'tipo_producto_esperado' => $tipoEsperado,
@@ -58,7 +64,7 @@ class CodigoBarrasService
                     return [
                         'error' => true,
                         'codigo_error' => 'producto_no_identificado',
-                        'mensaje' => "No hay producto configurado para el patron {$segmento} en codigos de 54 caracteres.",
+                        'mensaje' => "No hay producto configurado para el patron {$segmento} en codigos de {$longitud} caracteres.",
                         'longitud_recibida' => $longitud,
                         'segmento_identificador' => $segmento,
                     ];
@@ -137,12 +143,12 @@ class CodigoBarrasService
 
     private function resolveProductoPorCodigo(Collection $productos, string $codigo, int $longitud): ?Producto
     {
-        if ($longitud !== 54) {
+        if (!$this->usaPatronIdentificador($longitud)) {
             return $productos->first();
         }
 
-        $segmento = substr($codigo, 18, 7);
-        $tipoEsperado = $this->getTipoProductoPorPatron54($segmento);
+        $segmento = $this->getSegmentoIdentificador($codigo, $longitud);
+        $tipoEsperado = $this->getTipoProductoPorPatron($longitud, $segmento);
 
         if (!$tipoEsperado) {
             return null;
@@ -153,28 +159,38 @@ class CodigoBarrasService
         });
     }
 
-    private function getPatrones54ParaProducto(string $tipoProducto): array
+    private function usaPatronIdentificador(int $longitud): bool
     {
-        $tipoNormalizado = $this->normalizeTipoProducto($tipoProducto);
-
-        foreach (self::CODIGOS_54_POR_PRODUCTO as $tipoConfigurado => $patrones) {
-            if ($this->normalizeTipoProducto($tipoConfigurado) === $tipoNormalizado) {
-                return $patrones;
-            }
-        }
-
-        return [];
+        return in_array($longitud, [32, 54], true);
     }
 
-    private function getTipoProductoPorPatron54(string $segmento): ?string
+    private function getSegmentoIdentificador(string $codigo, int $longitud): string
     {
-        foreach (self::CODIGOS_54_POR_PRODUCTO as $tipoProducto => $patrones) {
+        if ($longitud === 32) {
+            return substr($codigo, 0, 6);
+        }
+
+        return substr($codigo, 18, 7);
+    }
+
+    private function getTipoProductoPorPatron(int $longitud, string $segmento): ?string
+    {
+        foreach ($this->getPatronesPorLongitud($longitud) as $tipoProducto => $patrones) {
             if (in_array($segmento, $patrones, true)) {
                 return $tipoProducto;
             }
         }
 
         return null;
+    }
+
+    private function getPatronesPorLongitud(int $longitud): array
+    {
+        return match ($longitud) {
+            32 => self::CODIGOS_32_POR_PRODUCTO,
+            54 => self::CODIGOS_54_POR_PRODUCTO,
+            default => [],
+        };
     }
 
     private function normalizeTipoProducto(string $tipoProducto): string

@@ -23,12 +23,42 @@
             min-height: 110px;
         }
 
-        .logo {
-            width: 120px;
-            height: auto;
-            display: block;
+        .brand-logo {
             float: right;
-            margin: 0 0 12px 20px;
+            width: 245px;
+            margin: 0 0 14px 22px;
+            padding: 15px 14px 13px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 42%, #1d4ed8 100%);
+            border: 1px solid #93c5fd;
+            text-align: center;
+            color: #0f3f9f;
+            box-shadow: 0 8px 18px rgba(29, 78, 216, 0.18);
+        }
+
+        .brand-logo-main {
+            display: block;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 22px;
+            line-height: 1;
+            font-weight: bold;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+            color: #0751b8;
+            text-shadow: 0 1px 0 #ffffff;
+        }
+
+        .brand-logo-sub {
+            display: block;
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.72);
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 3.2px;
+            text-transform: uppercase;
+            color: #1e40af;
         }
 
         .meta {
@@ -65,7 +95,10 @@
 </head>
 <body>
     <div class="header">
-        <img class="logo" src="{{ public_path('recibo.png') }}" alt="Logo">
+        <div class="brand-logo">
+            <span class="brand-logo-main">Distribuidora RM</span>
+            <span class="brand-logo-sub">Calidad y servicio</span>
+        </div>
         <h1>Nota de venta</h1>
 
         <div class="meta">
