@@ -163,7 +163,7 @@ export default function VentasIndex({ ventaReciente, productos, flash }: IndexPr
   };
 
   const pushItem = (item: FormItem) => {
-    setItems((previous) => [...previous, item]);
+    setItems((previous) => [item, ...previous]);
     saleForm.clearErrors();
   };
 
