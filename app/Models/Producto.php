@@ -45,4 +45,9 @@ class Producto extends Model
     {
         return $this->hasMany(Caja::class, 'tipo_producto', 'tipo_producto');
     }
+
+    public function ventaItems(): HasMany
+    {
+        return $this->hasMany(VentaItem::class);
+    }
 }

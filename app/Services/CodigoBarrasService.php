@@ -13,6 +13,7 @@ class CodigoBarrasService
         'RECORTE 80/20' => ['1255519', '2106561'],
         'PIERNA SIN HUESO CONG.' => ['2101030'],
         'GRASA BACHOCO' => ['1204010'],
+        'TRIPA EMBUTIDO COMPLETA' => ['1357073'],
     ];
 
     private const CODIGOS_32_POR_PRODUCTO = [

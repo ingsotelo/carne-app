@@ -14,26 +14,31 @@ class ProductoController extends Controller
     {
         $productos = Producto::query()
             ->withCount('cajas')
+            ->withCount('ventaItems')
             ->withSum('cajas', 'peso')
             ->orderBy('tipo_producto')
             ->get()
             ->map(function (Producto $producto) {
                 $totalPeso = (float) ($producto->cajas_sum_peso ?? 0);
                 $precioKg = (float) $producto->precio_kg;
+                $totalCajas = (int) ($producto->cajas_count ?? 0);
+                $cajasVendidas = (int) ($producto->venta_items_count ?? 0);
 
                 return [
                     'id' => $producto->id,
                     'clave_producto' => $producto->clave_producto,
                     'tipo_producto' => $producto->tipo_producto,
-            'precio_kg' => number_format($precioKg, 2, '.', ''),
-            'longitud_codigo' => $producto->longitud_codigo,
-            'pos_peso' => $producto->pos_peso,
-            'longitud_peso' => $producto->longitud_peso,
-            'libras' => (bool) $producto->libras,
-            'total_cajas' => $producto->cajas_count ?? 0,
-            'total_peso' => number_format($totalPeso, 2, '.', ''),
-            'costo_total' => number_format($totalPeso * $precioKg, 2, '.', ''),
-        ];
+                    'precio_kg' => number_format($precioKg, 2, '.', ''),
+                    'longitud_codigo' => $producto->longitud_codigo,
+                    'pos_peso' => $producto->pos_peso,
+                    'longitud_peso' => $producto->longitud_peso,
+                    'libras' => (bool) $producto->libras,
+                    'total_cajas' => $totalCajas,
+                    'cajas_vendidas' => $cajasVendidas,
+                    'cajas_restantes' => max($totalCajas - $cajasVendidas, 0),
+                    'total_peso' => number_format($totalPeso, 2, '.', ''),
+                    'costo_total' => number_format($totalPeso * $precioKg, 2, '.', ''),
+                ];
             });
 
         return Inertia::render('Productos/Index', [

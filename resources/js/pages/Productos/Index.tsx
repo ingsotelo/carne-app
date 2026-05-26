@@ -14,6 +14,8 @@ interface Producto {
   longitud_peso: number;
   libras: boolean;
   total_cajas: number;
+  cajas_vendidas: number;
+  cajas_restantes: number;
   total_peso: string;
   costo_total: string;
 }
@@ -511,6 +513,12 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
                   Cajas registradas
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Cajas vendidas
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Cajas restantes
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   Peso total (Kg)
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -525,7 +533,7 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
               {productos.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={10}
+                    colSpan={13}
                     className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400"
                   >
                     Aún no hay productos registrados. Crea el primero usando el botón
@@ -558,6 +566,12 @@ export default function ProductosIndex({ productos, flash }: IndexProps) {
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                       {producto.total_cajas}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                      {producto.cajas_vendidas}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                      {producto.cajas_restantes}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                       {producto.total_peso} Kg
