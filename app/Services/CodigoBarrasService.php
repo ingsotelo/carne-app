@@ -22,6 +22,11 @@ class CodigoBarrasService
         'CUERO GRANJERO C/G Y C/C' => ['021236', '021237'],
     ];
 
+    private const CODIGOS_41_POR_PRODUCTO = [
+        'FORRO PIERNA DE CERDO, CONGELADO' => ['05020106005010702170'],
+        'FORRO PALETA DE CERDO, CONGELADO' => ['01020108113200659120'],
+    ];
+
     public function parse(string $codigo): array
     {
         try {
@@ -162,13 +167,17 @@ class CodigoBarrasService
 
     private function usaPatronIdentificador(int $longitud): bool
     {
-        return in_array($longitud, [32, 54], true);
+        return in_array($longitud, [32, 41, 54], true);
     }
 
     private function getSegmentoIdentificador(string $codigo, int $longitud): string
     {
         if ($longitud === 32) {
             return substr($codigo, 0, 6);
+        }
+
+        if ($longitud === 41) {
+            return substr($codigo, 0, 20);
         }
 
         return substr($codigo, 18, 7);
@@ -189,6 +198,7 @@ class CodigoBarrasService
     {
         return match ($longitud) {
             32 => self::CODIGOS_32_POR_PRODUCTO,
+            41 => self::CODIGOS_41_POR_PRODUCTO,
             54 => self::CODIGOS_54_POR_PRODUCTO,
             default => [],
         };

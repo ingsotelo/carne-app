@@ -74,4 +74,40 @@ class CodigoBarrasServiceTest extends TestCase
             $this->assertSame('GRASA BACHOCO', $parsed['producto']);
         }
     }
+
+    public function test_parse_resuelve_productos_de_41_caracteres_por_prefijo(): void
+    {
+        $productos = [
+            ['tipo_producto' => 'FORRO PIERNA DE CERDO, CONGELADO', 'clave_producto' => '05020106005010702170'],
+            ['tipo_producto' => 'FORRO PALETA DE CERDO, CONGELADO', 'clave_producto' => '01020108113200659120'],
+        ];
+
+        foreach ($productos as $producto) {
+            Producto::create([
+                ...$producto,
+                'precio_kg' => 100,
+                'longitud_codigo' => 41,
+                'pos_peso' => 32,
+                'longitud_peso' => 4,
+                'libras' => false,
+            ]);
+        }
+
+        $service = new CodigoBarrasService();
+
+        $casos = [
+            '05020106005010702170200108042026238420891' => ['FORRO PIERNA DE CERDO, CONGELADO', 23.84],
+            '05020106005010702170200108042026240423047' => ['FORRO PIERNA DE CERDO, CONGELADO', 24.04],
+            '01020108113200659120200125022026235922308' => ['FORRO PALETA DE CERDO, CONGELADO', 23.59],
+            '01020108113200659120200126022026228525087' => ['FORRO PALETA DE CERDO, CONGELADO', 22.85],
+        ];
+
+        foreach ($casos as $codigo => [$tipoProducto, $pesoKg]) {
+            $parsed = $service->parse($codigo);
+
+            $this->assertFalse($parsed['error']);
+            $this->assertSame($tipoProducto, $parsed['producto']);
+            $this->assertSame($pesoKg, $parsed['peso_kg']);
+        }
+    }
 }
