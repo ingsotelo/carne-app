@@ -14,7 +14,7 @@ class CodigoBarrasService
         'PIERNA SIN HUESO CONG.' => ['2101030'],
         'GRASA BACHOCO' => ['1204010'],
         'TRIPA EMBUTIDO COMPLETA' => ['1357073'],
-        'PIERNA S/HUESO A GRANEL CONG' => ['2509230','2509050'],
+        'PIERNA S/HUESO A GRANEL CONG' => ['2101500'],
     ];
 
     private const CODIGOS_32_POR_PRODUCTO = [
