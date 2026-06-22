@@ -580,7 +580,9 @@ export default function VentasIndex({ ventaReciente, productos, flash }: IndexPr
                     ) : (
                       items.map((item, index) => (
                         <tr key={`${item.descripcion_producto}-${index}`}>
-                          <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{index + 1}</td>
+                          <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
+                            {items.length - index}
+                          </td>
                           <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
                             {item.descripcion_producto}
                           </td>
